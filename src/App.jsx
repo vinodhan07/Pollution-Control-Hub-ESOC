@@ -121,6 +121,7 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState('');
   const [refreshCountdown, setRefreshCountdown] = useState(AUTO_REFRESH_SECONDS);
   const [error, setError] = useState('');
+  const [locationNotice, setLocationNotice] = useState('');
   const [theme, setTheme] = useState('light');
   const [timeRange, setTimeRange] = useState(24);
 
@@ -142,6 +143,7 @@ export default function App() {
 
   useEffect(() => {
     if (selectedCity !== 'auto') {
+      setLocationNotice('');
       const city = CITY_COORDINATES.find((item) => item.name === selectedCity);
       if (city) {
         setPosition({
@@ -153,10 +155,17 @@ export default function App() {
       return;
     }
 
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      setLocationNotice(
+        "Your browser can't detect location, so we're showing Delhi. Pick a city from the dropdown if that's not right."
+      );
+      setPosition(DEFAULT_POSITION);
+      return;
+    }
 
     navigator.geolocation.getCurrentPosition(
       (coords) => {
+        setLocationNotice('');
         setPosition({
           lat: Number(coords.coords.latitude.toFixed(4)),
           lon: Number(coords.coords.longitude.toFixed(4)),
@@ -164,6 +173,10 @@ export default function App() {
         });
       },
       () => {
+        setLocationNotice(
+          "Couldn't detect your location — showing Delhi for now. Pick a city manually from the dropdown if you need different data."
+        );
+        setPosition(DEFAULT_POSITION);
       },
       { timeout: 8000 }
     );
@@ -273,6 +286,15 @@ export default function App() {
           refreshCountdown={refreshCountdown}
           lastUpdated={lastUpdated}
         />
+      )}
+
+      {locationNotice && selectedCity === 'auto' && (
+        <div className="location-notice" role="status">
+          <p>{locationNotice}</p>
+          <button type="button" onClick={() => setLocationNotice('')}>
+            Dismiss
+          </button>
+        </div>
       )}
 
       {error && <p className="error-banner">{error}</p>}
