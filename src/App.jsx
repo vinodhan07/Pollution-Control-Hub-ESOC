@@ -7,6 +7,7 @@ import HealthAdvisory from './components/HealthAdvisory';
 import LocationMap from './components/LocationMap';
 import QuizSection from './components/QuizSection';
 import SolutionsAwareness from './components/SolutionsAwareness';
+import ScenarioSimulator from './components/ScenarioSimulator';
 import { CITY_COORDINATES } from './constants/cities';
 import {
   estimateWeeklyMonthlyAverages,
@@ -302,6 +303,7 @@ export default function App() {
           <HealthAdvisory />
           <SolutionsAwareness />
           <AnalyticsInsights analytics={analytics} trend={trend} timeRange={timeRange} />
+          <ScenarioSimulator current={current} />
           <CommunityHub />
         </div>
       ) : (
