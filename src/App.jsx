@@ -3,6 +3,7 @@ import AlertsPanel from './components/AlertsPanel';
 import AnalyticsInsights from './components/AnalyticsInsights';
 import CommunityHub from './components/CommunityHub';
 import Dashboard from './components/Dashboard';
+import Footer from './components/Footer';
 import HealthAdvisory from './components/HealthAdvisory';
 import LocationMap from './components/LocationMap';
 import QuizSection from './components/QuizSection';
@@ -333,6 +334,8 @@ export default function App() {
           <QuizSection />
         </div>
       )}
+
+      <Footer />
     </main>
   );
 }
