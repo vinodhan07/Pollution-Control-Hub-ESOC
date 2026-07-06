@@ -86,7 +86,8 @@ function AppControls({
 function SectionNav({ activeSection, onSectionChange, theme, onToggleTheme }) {
   const sections = [
     { id: 'home', label: 'Home' },
-    { id: 'quiz', label: 'Quiz' }
+    { id: 'quiz', label: 'Quiz' },
+    { id: 'community', label: 'Community' }
   ];
   const isDark = theme === 'dark';
 
@@ -94,9 +95,8 @@ function SectionNav({ activeSection, onSectionChange, theme, onToggleTheme }) {
     <nav 
       className="section-nav" 
       aria-label="Main sections"
-      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}
     >
-      <div className="nav-sections" style={{ display: 'flex', gap: '0.5rem' }}>
+      <div className="nav-sections">
         {sections.map((section) => (
           <button
             key={section.id}
@@ -107,44 +107,47 @@ function SectionNav({ activeSection, onSectionChange, theme, onToggleTheme }) {
             {section.label}
           </button>
         ))}
+
+        <div className="nav-divider"></div>
+
+        <button
+          type="button"
+          className={`theme-toggle-inline ${theme === "dark" ? "dark" : ""}`}
+          onClick={onToggleTheme}
+          aria-label="Toggle Theme"
+        >
+          <span className="toggle-thumb">
+            {theme === "dark" ? (
+              <svg
+                viewBox="0 0 24 24"
+                className="moon-icon"
+              >
+                <path
+                  d="M20 15.5A8.5 8.5 0 1 1 12.5 4a7 7 0 0 0 7.5 11.5z"
+                  fill="currentColor"
+                />
+              </svg>
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                className="sun-icon"
+              >
+                <circle cx="12" cy="12" r="5" fill="currentColor" />
+                <g stroke="currentColor" strokeWidth="2">
+                  <line x1="12" y1="1" x2="12" y2="4" />
+                  <line x1="12" y1="20" x2="12" y2="23" />
+                  <line x1="1" y1="12" x2="4" y2="12" />
+                  <line x1="20" y1="12" x2="23" y2="12" />
+                  <line x1="4" y1="4" x2="6" y2="6" />
+                  <line x1="18" y1="18" x2="20" y2="20" />
+                  <line x1="18" y1="6" x2="20" y2="4" />
+                  <line x1="4" y1="20" x2="6" y2="18" />
+                </g>
+              </svg>
+            )}
+          </span>
+        </button>
       </div>
-      <button
-        type="button"
-        className={`theme-toggle-inline ${theme === "dark" ? "dark" : ""}`}
-        onClick={onToggleTheme}
-        aria-label="Toggle Theme"
-      >
-        <span className="toggle-thumb">
-          {theme === "dark" ? (
-            <svg
-              viewBox="0 0 24 24"
-              className="moon-icon"
-            >
-              <path
-                d="M20 15.5A8.5 8.5 0 1 1 12.5 4a7 7 0 0 0 7.5 11.5z"
-                fill="currentColor"
-              />
-            </svg>
-          ) : (
-            <svg
-              viewBox="0 0 24 24"
-              className="sun-icon"
-            >
-              <circle cx="12" cy="12" r="5" fill="currentColor" />
-              <g stroke="currentColor" strokeWidth="2">
-                <line x1="12" y1="1" x2="12" y2="4" />
-                <line x1="12" y1="20" x2="12" y2="23" />
-                <line x1="1" y1="12" x2="4" y2="12" />
-                <line x1="20" y1="12" x2="23" y2="12" />
-                <line x1="4" y1="4" x2="6" y2="6" />
-                <line x1="18" y1="18" x2="20" y2="20" />
-                <line x1="18" y1="6" x2="20" y2="4" />
-                <line x1="4" y1="20" x2="6" y2="18" />
-              </g>
-            </svg>
-          )}
-        </span>
-      </button>
     </nav>
   );
 }
@@ -377,6 +380,9 @@ export default function App() {
           <SolutionsAwareness />
           <AnalyticsInsights analytics={analytics} trend={trend} timeRange={timeRange} />
           <ScenarioSimulator current={current} />
+        </div>
+      ) : activeSection === 'community' ? (
+        <div className="content-grid community-layout">
           <CommunityHub />
         </div>
       ) : (
