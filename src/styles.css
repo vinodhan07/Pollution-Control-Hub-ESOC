@@ -2087,6 +2087,192 @@ a {
   }
 }
 
+/* ============================================================
+   Enhanced Health Advisory Section
+   ============================================================ */
+.health-advisory-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.section-subtitle {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: var(--sp-4) 0 var(--sp-1);
+}
+
+.advisory-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-2);
+}
+
+.organ-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--brand);
+  flex-shrink: 0;
+}
+
+.divider-line {
+  height: 1px;
+  background: var(--line);
+  margin: var(--sp-4) 0;
+}
+
+.tabs-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.tabs-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+@media (min-width: 768px) {
+  .tabs-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.tabs-list-buttons {
+  display: flex;
+  background: color-mix(in srgb, var(--line) 40%, transparent);
+  padding: 4px;
+  border-radius: var(--r-md);
+  gap: 4px;
+  border: 1px solid var(--line);
+  align-self: flex-start;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 16px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-radius: calc(var(--r-md) - 2px);
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.tab-btn:hover {
+  color: var(--text);
+}
+
+.tab-btn.active {
+  background: var(--bg);
+  color: var(--brand);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-description {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-top: -8px;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-4);
+}
+
+@media (min-width: 768px) {
+  .tips-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tip-action-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  box-shadow: var(--shadow-sm);
+  transition: transform 220ms var(--ease), box-shadow 220ms var(--ease), border-color 220ms var(--ease);
+}
+
+.tip-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--brand);
+}
+
+.tip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tip-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  color: var(--brand);
+}
+
+.tip-icon-wrapper svg {
+  width: 20px;
+  height: 20px;
+}
+
+.priority-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: var(--r-sm);
+}
+
+.badge-info {
+  background: color-mix(in srgb, var(--brand) 12%, transparent);
+  color: var(--brand);
+}
+
+.badge-warning {
+  background: color-mix(in srgb, var(--warning, #eab308) 12%, transparent);
+  color: var(--warning, #ca8a04);
+}
+
+.badge-danger {
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
+}
+
+.tip-body h4 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--sp-1);
+}
+
+.tip-body p {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 /* ==========================================================================
    Historical Analysis & Calendar Heatmap
    ========================================================================== */
