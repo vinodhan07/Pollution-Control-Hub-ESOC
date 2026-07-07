@@ -399,6 +399,8 @@ a {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: var(--sp-3);
+  position: relative;
+  z-index: 20;
 }
 
 .control-group {
@@ -410,6 +412,9 @@ a {
   align-items: center;
   gap: var(--sp-3);
   box-shadow: var(--shadow-sm);
+  overflow: visible;
+  position: relative;
+  z-index: 10;
   transition:
     box-shadow 200ms var(--ease),
     transform 200ms var(--ease);
@@ -2136,3 +2141,113 @@ a {
   background-color: transparent;
   pointer-events: none;
 }
+
+/* ==========================================================================
+   Location Search (Autocomplete)
+   ========================================================================== */
+.location-search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 200px;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.location-search-input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: all 200ms var(--ease);
+}
+
+.location-search-input::placeholder {
+  color: var(--muted);
+}
+
+.location-search-input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 15%, transparent);
+}
+
+.location-search-spinner {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--muted);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.location-search-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  min-width: 280px;
+  max-height: 250px;
+  overflow-y: auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.location-search-header {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  background: var(--panel);
+  font-weight: 600;
+}
+
+.location-search-empty {
+  padding: 1rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.location-search-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background 200ms var(--ease);
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.location-search-item:hover,
+.location-search-item.active {
+  background: var(--panel);
+}
+
+.location-search-item .location-icon,
+.location-search-item .recent-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
