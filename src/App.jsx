@@ -227,6 +227,13 @@ export default function App() {
     const { signal } = controller;
 
     const load = async (silent = false) => {
+       if (!navigator.onLine) {
+       setCurrent(null);
+       setError("You're offline. Please reconnect to view air quality data.");
+       setLoading(false);
+      setIsRefreshing(false);
+      return;
+  }
       try {
         if (!silent) setLoading(true);
         if (silent) setIsRefreshing(true);
@@ -257,7 +264,9 @@ export default function App() {
     load();
 
     const refreshTimer = setInterval(() => {
-      load(true);
+      if (navigator.onLine) {
+        load(true);
+    }
     }, AUTO_REFRESH_SECONDS * 1000);
 
     const countdownTimer = setInterval(() => {
@@ -286,6 +295,12 @@ export default function App() {
   const refreshNow = async () => {
     if (isRefreshing) return;
 
+    if (!navigator.onLine) {
+  setCurrent(null);
+  setError("You're offline. Please reconnect to view air quality data.");
+  return;
+}
+
     if (refreshControllerRef.current) refreshControllerRef.current.abort();
     const controller = new AbortController();
     refreshControllerRef.current = controller;
@@ -305,6 +320,7 @@ export default function App() {
       setCityComparisons(cities);
       setLastUpdated(new Date().toISOString());
       setRefreshCountdown(AUTO_REFRESH_SECONDS);
+      setError('');
     } catch (loadError) {
       if (loadError.name === 'AbortError') return;
       setError(loadError.message || 'Unable to refresh live AQI data.');
@@ -315,7 +331,17 @@ export default function App() {
     }
   };
 
-  if (loading || !current) {
+  useEffect(() => {
+  const handleOnline = () => refreshNow();
+
+  window.addEventListener("online", handleOnline);
+
+  return () => {
+    window.removeEventListener("online", handleOnline);
+  };
+}, []);
+
+  if (loading && !error) {
     return (
       <main className="app-shell loading-state">
         <SectionNav activeSection={activeSection} onSectionChange={setActiveSection} theme={theme} onToggleTheme={toggleTheme} />
@@ -349,37 +375,63 @@ export default function App() {
         </div>
       )}
 
-      {error && <p className="error-banner">{error}</p>}
-
       {activeSection === 'home' ? (
-        <div className="content-grid">
-          <Dashboard
-            cityName={position.cityName}
-            current={current}
-            trend={trend}
-            cityComparisons={cityComparisons}
-            timeRange={timeRange}
-            onTimeRangeChange={setTimeRange}
-            lastUpdated={lastUpdated}
-            isRefreshing={isRefreshing}
-            confidenceScore={confidenceScore}
-            dataCompleteness={dataCompleteness}
-          />
-          <LocationMap center={position} nearbyPoints={nearbyPoints} confidenceScore={confidenceScore} />
-          <AlertsPanel cityName={position.cityName} current={current} confidenceScore={confidenceScore} dataCompleteness={dataCompleteness} exposureEstimate={exposureEstimate} />
-          <HealthAdvisory />
-          <SolutionsAwareness />
-          <AnalyticsInsights analytics={analytics} trend={trend} timeRange={timeRange} />
-          <ScenarioSimulator current={current} />
-          <CommunityHub />
-        </div>
-      ) : (
-        <div className="content-grid quiz-layout">
-          <QuizSection />
-        </div>
-      )}
+  <>
+    {error && (
+      <p className="error-banner">{error}</p>
+    )}
 
-      <Footer />
+    {current && (
+      <div className="content-grid">
+        <Dashboard
+          cityName={position.cityName}
+          current={current}
+          trend={trend}
+          cityComparisons={cityComparisons}
+          timeRange={timeRange}
+          onTimeRangeChange={setTimeRange}
+          lastUpdated={lastUpdated}
+          isRefreshing={isRefreshing}
+          confidenceScore={confidenceScore}
+          dataCompleteness={dataCompleteness}
+        />
+
+        <LocationMap
+          center={position}
+          nearbyPoints={nearbyPoints}
+          confidenceScore={confidenceScore}
+        />
+
+        <AlertsPanel
+          cityName={position.cityName}
+          current={current}
+          confidenceScore={confidenceScore}
+          exposureEstimate={exposureEstimate}
+        />
+
+        <HealthAdvisory />
+
+        <SolutionsAwareness />
+
+        <AnalyticsInsights
+          analytics={analytics}
+          trend={trend}
+          timeRange={timeRange}
+        />
+
+        <ScenarioSimulator current={current} />
+
+        <CommunityHub />
+      </div>
+    )}
+  </>
+) : (
+  <div className="content-grid quiz-layout">
+    <QuizSection />
+  </div>
+)}
+
+<Footer />
     </main>
   );
 }
