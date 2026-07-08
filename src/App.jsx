@@ -16,7 +16,8 @@ import {
   estimateWeeklyMonthlyAverages,
   fetchAirQualityByCoords,
   fetchCityComparisons,
-  estimateExposureTime
+  estimateExposureTime,
+  fetchWindData
 } from './services/airQualityService';
 
 const DEFAULT_POSITION = {
@@ -165,6 +166,7 @@ export default function App() {
   const [trend, setTrend] = useState([]);
   const [nearbyPoints, setNearbyPoints] = useState([]);
   const [cityComparisons, setCityComparisons] = useState([]);
+  const [windData, setWindData] = useState(null);
   const [confidenceScore, setConfidenceScore] = useState('High');
   const [dataCompleteness, setDataCompleteness] = useState(100);
   const [loading, setLoading] = useState(true);
@@ -246,9 +248,10 @@ export default function App() {
         if (!silent) setLoading(true);
         if (silent) setIsRefreshing(true);
 
-        const [aqi, cities] = await Promise.all([
+        const [aqi, cities, wind] = await Promise.all([
           fetchAirQualityByCoords(position.lat, position.lon, signal),
-          fetchCityComparisons(signal)
+          fetchCityComparisons(signal),
+          fetchWindData(position.lat, position.lon, signal)
         ]);
 
         setCurrent(aqi.current);
@@ -257,6 +260,7 @@ export default function App() {
         setConfidenceScore(aqi.confidenceScore);
         setDataCompleteness(aqi.dataCompleteness);
         setCityComparisons(cities);
+        setWindData(wind);
         setLastUpdated(new Date().toISOString());
         setRefreshCountdown(AUTO_REFRESH_SECONDS);
         setError('');
@@ -308,9 +312,10 @@ export default function App() {
 
     try {
       setIsRefreshing(true);
-      const [aqi, cities] = await Promise.all([
+      const [aqi, cities, wind] = await Promise.all([
         fetchAirQualityByCoords(position.lat, position.lon, signal),
-        fetchCityComparisons(signal)
+        fetchCityComparisons(signal),
+        fetchWindData(position.lat, position.lon, signal)
       ]);
       setCurrent(aqi.current);
       setTrend(aqi.trend);
@@ -318,6 +323,7 @@ export default function App() {
       setConfidenceScore(aqi.confidenceScore);
       setDataCompleteness(aqi.dataCompleteness);
       setCityComparisons(cities);
+      setWindData(wind);
       setLastUpdated(new Date().toISOString());
       setRefreshCountdown(AUTO_REFRESH_SECONDS);
     } catch (loadError) {
@@ -382,7 +388,7 @@ export default function App() {
             confidenceScore={confidenceScore}
             dataCompleteness={dataCompleteness}
           />
-          <LocationMap center={position} nearbyPoints={nearbyPoints} confidenceScore={confidenceScore} />
+          <LocationMap center={position} nearbyPoints={nearbyPoints} confidenceScore={confidenceScore} windData={windData} />
           <AlertsPanel cityName={position.cityName} current={current} confidenceScore={confidenceScore} dataCompleteness={dataCompleteness} exposureEstimate={exposureEstimate} />
           <HealthAdvisory />
           <SolutionsAwareness />

@@ -163,6 +163,23 @@ export async function fetchAirQualityByCoords(lat, lon, signal) {
   };
 }
 
+export async function fetchWindData(lat, lon, signal) {
+  if (!isValidCoord(lat, lon)) return null;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=wind_speed_10m,wind_direction_10m`;
+  try {
+    const response = await fetch(url, { signal });
+    if (!response.ok) return null;
+    const data = await response.json();
+    return {
+      speed: data.current.wind_speed_10m,
+      direction: data.current.wind_direction_10m
+    };
+  } catch (err) {
+    if (err.name === 'AbortError') throw err;
+    return null;
+  }
+}
+
 export async function fetchCityComparisons(signal) {
   const cityData = await Promise.all(
     CITY_COORDINATES.map(async (city) => {
