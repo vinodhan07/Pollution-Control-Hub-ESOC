@@ -198,6 +198,17 @@ export default function CommunityHub() {
     setVotedIds((prev) => new Set(prev).add(id));
   };
 
+  const markAddressed = (id) => {
+    setReports((prev) =>
+      prev.map((report) => {
+        if (report.id !== id) return report;
+        if (!report.status.startsWith("Verified")) return report;
+
+        return { ...report, status: "Addressed" };
+      })
+    );
+  };
+
   const filteredReports = reports.filter((report) => {
     if (filter === "All") return true;
     if (filter === "Verified") return report.status.startsWith("Verified");
@@ -304,9 +315,16 @@ export default function CommunityHub() {
                   <h3>{report.title}</h3>
                   <span className="status-badge">{report.status}</span>
                 </div>
-                <button onClick={() => vote(report.id)} type="button" disabled={votedIds.has(report.id)}>
-                  {votedIds.has(report.id) ? 'Voted' : 'Upvote'} ({report.votes})
-                </button>
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                  {report.status.startsWith("Verified") && (
+                    <button type="button" onClick={() => markAddressed(report.id)}>
+                      Mark addressed
+                    </button>
+                  )}
+                  <button onClick={() => vote(report.id)} type="button" disabled={votedIds.has(report.id)}>
+                    {votedIds.has(report.id) ? 'Voted' : 'Upvote'} ({report.votes})
+                  </button>
+                </div>
               </div>
               <p>{report.description}</p>
               {report.image && <img src={report.image} alt={report.title} />}
