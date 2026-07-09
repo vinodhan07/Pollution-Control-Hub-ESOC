@@ -164,7 +164,7 @@ export default function HealthAdvisory() {
      <div className="advisory-grid">
         {sections.map((section) => (
           <article key={section.id} className="advisory-card">
-            <div className={`icon-circle ${section.variant}`}>{section.icon}</div>
+            <div className={`icon-container ${section.variant}`}>{section.icon}</div>
             <div className="advisory-card-top">
               <h3>{section.title}</h3>
             </div>
@@ -172,7 +172,7 @@ export default function HealthAdvisory() {
           </article>
         ))}
       </div>
-      
+
       <div className="divider-line" />
 
       {/* Interactive Tabs Section */}
