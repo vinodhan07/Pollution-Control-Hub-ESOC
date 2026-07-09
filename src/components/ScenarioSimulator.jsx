@@ -55,6 +55,7 @@ const PRESETS = [
 /* ─── Component ───────────────────────────────────────────────────────────── */
 
 export default function ScenarioSimulator({ current }) {
+  if (!current) { return null;}
   const [pm25Reduction, setPm25Reduction] = useState(0);
   const [no2Reduction, setNo2Reduction] = useState(0);
   const [o3Reduction, setO3Reduction] = useState(0);
